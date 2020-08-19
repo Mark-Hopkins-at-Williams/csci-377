@@ -79,3 +79,51 @@ Office of Disability Support Services, disability-services@reed.edu or
 503-517-7921 as early as possible in the semester. Please be aware that 
 requests may take several weeks to implement once
 approved, and that accommodations are not retroactive.
+
+### Covid-19 Policies
+
+**Face Masks:** All members of the class (students, faculty, staff) are 
+expected to wear face masks during class. If a student does not wear a mask, 
+they will be asked to leave. If a student continues to not 
+wear a face mask in future classes, they may be dropped 
+from the course. 
+
+**Health Checking:** Students, staff, and faculty are expected to complete a 
+health self-assessment each day to check for symptoms of COVID-19. This 
+assessment tool will be available as a Qualtrics survey.  Those experiencing 
+COVID-19 symptoms should not attend an in-person course (see details below). 
+
+**In-person course attendance (Sections 1 and 2):** Each community member
+has an individual responsibility to help prevent the spread of the coronavirus.
+If you are ill, self-isolating and/or quarantining due to possible exposure 
+to coronavirus or to other infectious diseases, your in-person attendance 
+in class is not required (and you will not be penalized for not attending 
+in-person classes). Self-isolation is the recommended course of action
+for anyone experiencing flu-like symptoms, whether due to possible coronavirus
+or to other illnesses.  Please stay at home if you feel sick, and most
+especially if you think you may have an infectious disease. 
+You should not attend class if you have tested positive for COVID-19, or
+if you have received notification or advice from the college or a health
+professional (including HCC staff) to quarantine or self-isolate.
+The CDC suggests that people with the following symptoms may have COVID:
+fever or chills, cough, shortness of breath or difficulty breathing, fatigue,
+muscle or body aches, headache, new loss of taste or smell, sore throat,
+congestion or runny nose, nausea or vomiting, diarrhea.  As always, please
+consult a medical professional (members of the HCC or otherwise) if you have
+any questions about your health or health safety.
+Students who are quarantining or self-isolating should
+attend Section 3 lectures (no matter which
+section you are enrolled in), to the extent that their health allows. 
+
+If you need to miss a class, or series of classes, due to illness,
+self-isolation, and/or quarantine, you are responsible for emailing me
+to let me know as soon as possible.  You are also responsible for coordinating
+with me to complete work that you might miss due to absences. It can be
+challenging to catch up after some time out of class, so let’s collaborate
+to make a plan for getting up to speed.  
+
+Finally, please let me know right away about any technical issues you are
+having with respect to accessing material provided to you during a period
+away from in person class attendance.
+
+
