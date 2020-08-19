@@ -54,6 +54,20 @@ entire course and will not be worth more than the midterms. This means that
 once you take the logic exam, you can forget everything you ever knew about
 logic, but I hope you don’t.
 
+### Learning Outcomes
+
+After successful completion of the course, a student should:
+
+1. Understand introductory concepts in AI logic, as demonstrated by the following skills:
+  - Express logical statements using propositional and first-order logic, and understand the ontological difference between propositional and first-order logics. 
+  - Apply and analyze logical inference algorithms, such as resolution and forward/backward chaining 
+2. Understand introductory concepts in AI search, as demonstrated by the following skills:
+  - Implement and analyze uninformed search strategies such as BFS, DFS, and depth-limited search, and bidirectional search 
+  - Implement heuristics in informed search strategies, as well as identify the aspects of a good heuristic
+  - Implement and analyze simple game search algorithms, e.g. minimax and alpha-beta pruning
+3. Understand introductory concepts in probabilistic models and reinforcement learning, as demonstrated by the following skills:
+  - Construct probabilistic models of uncertainty and compute/understand associated concepts like d-separation.
+  - Implement a reinforcement learning engine for a simple scenario, like learning to play blackjack.
 
 
 ### Collaboration
