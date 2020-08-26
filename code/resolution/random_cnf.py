@@ -1,7 +1,7 @@
 import random
 
 from cnf import Literal, Clause
-from resolution import resolution_solver
+from resolution import full_resolution
 
 def choose(N, k):
     numbers = list(range(N))
@@ -35,7 +35,7 @@ def plot_random_cnf(k_sat, num_symbols, max_num_clauses, step_size, num_trials):
     for l in range(1, max_num_clauses, step_size):
         satisfiable_count = 0
         for trial in range(num_trials):
-            if resolution_solver(generate_random_cnf(k_sat, num_symbols, l)):
+            if full_resolution(generate_random_cnf(k_sat, num_symbols, l)):
                 satisfiable_count += 1
         x_values.append(l)
         y_values.append(satisfiable_count / num_trials)

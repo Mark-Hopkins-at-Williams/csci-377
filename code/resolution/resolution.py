@@ -1,8 +1,14 @@
 import queue
 
+def log(s):
+    pass
+
 def resolve_symbol(clause1, clause2, symbol):
-    if clause1.symbol_value(symbol) * clause2.symbol_value(symbol) == -1:
-        return clause1.remove(symbol).disjoin(clause2.remove(symbol))
+    if symbol in clause1 and symbol in clause2:
+        if clause1[symbol] and not clause2[symbol]:
+            return clause1.remove(symbol) | clause2.remove(symbol)
+        if not clause1[symbol] and clause2[symbol]:
+            return clause1.remove(symbol) | clause2.remove(symbol)
     return None
 
 def resolve(clause1, clause2):
@@ -12,7 +18,6 @@ def resolve(clause1, clause2):
        if resolvent is not None:
            resolvents.append(resolvent)
     return resolvents
-
 
 class ClauseQueue:
     def __init__(self, queue = queue.Queue(), priority_function = lambda clause: 0):
@@ -37,46 +42,33 @@ class ClauseQueue:
     def numGenerated(self):
         return len(self.cached_clauses)
 
-
-def resolution_solver(clauses, verbose=False):
-    """
-    Example usage:
-        
-    from resolution import *
-    resolution_solver(example_clauses, verbose=True)     [ should return False ]
-    resolution_solver(example_clauses[1:], verbose=True) [ should return True ]
-
-    """
-    processed = set([])
-    unprocessed = ClauseQueue(queue.PriorityQueue(), lambda clause: clause.size())
-    for c in clauses:
+def general_resolution_solver(processed, initial_unprocessed, clause_filter):
+    unprocessed = ClauseQueue(queue.PriorityQueue(), lambda clause: len(clause))
+    for c in initial_unprocessed:
         unprocessed.push(c)
     while not unprocessed.empty():
         next_to_process = unprocessed.pop()
-        for clause in processed:
-            for resolvent in resolve(next_to_process, clause):
-                is_new_clause = unprocessed.push(resolvent)
-                if is_new_clause and verbose:
-                    print("{} [BY RESOLVING {} WITH {}]"
-                          .format(resolvent, next_to_process, clause))                    
-                if resolvent.is_false():
-                    if verbose:
-                        print("Proved unsat after generating {} clauses."
-                              .format(unprocessed.numGenerated()))
-                    return False
+        if clause_filter(next_to_process): 
+            for clause in processed:
+                for resolvent in resolve(next_to_process, clause):
+                    is_new_clause = unprocessed.push(resolvent)
+                    if is_new_clause:
+                        log("{} [BY RESOLVING {} WITH {}]"
+                            .format(resolvent, next_to_process, clause))                    
+                    if not bool(resolvent):
+                        log("Proved unsat after generating {} clauses."
+                            .format(unprocessed.numGenerated()))
+                        return None
         processed.add(next_to_process)
-    if verbose:
-        print("Proved sat after generating {} clauses."
-              .format(unprocessed.numGenerated()))
-    return True
+    log("Proved sat after generating {} clauses.".format(unprocessed.numGenerated()))
+    return processed
 
-import cnf
-example_clauses = [cnf.c('a || b'), 
-                   cnf.c('!a || b || e'),
-                   cnf.c('a || !b'),
-                   cnf.c('b || !e') ,
-                   cnf.c('d || !e'),
-                   cnf.c('!b || !c || !f'),
-                   cnf.c('a || !e'),
-                   cnf.c('!b || f'),
-                   cnf.c('!b || c')]
+def full_resolution(clauses):
+    processed = set([])
+    unprocessed = clauses
+    return general_resolution_solver(processed, unprocessed, lambda x: True)
+
+def unit_resolution(unit_clause, clauses):
+    processed = set(clauses)
+    unprocessed = [unit_clause]
+    return general_resolution_solver(processed, unprocessed, lambda x: len(x) == 1)

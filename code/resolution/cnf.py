@@ -5,8 +5,6 @@ def l(s):
     else:
         return Literal(s, False)
 
-
-
 def c(s):
     """
     Convenience method for constructing CNF clauses, e.g. for Exercise 7.12:
@@ -22,8 +20,20 @@ def c(s):
     c8 = c('!b || c')        
     
     """
-    literal_strings = [x.strip() for x in s.split('||')]
+    if s == 'FALSE':
+        literal_strings = []
+    else:
+        literal_strings = [x.strip() for x in s.split('||')]
     return Clause([l(x) for x in literal_strings])
+
+def sentence(s):
+    return [c(clause) for clause in s]
+
+def get_symbols(clauses):
+    syms = set([])
+    for clause in clauses:
+        syms = syms | clause.symbols()
+    return syms
 
 
 class Literal:
@@ -50,34 +60,11 @@ class Clause:
         for lit in self.literals:
             self.literal_values[lit.symbol] = lit.neg
 
-    def symbol_value(self, sym):
-        if sym in self.literal_values:
-            if self.literal_values[sym] == True:
-                return -1
-            else:
-                return 1
-        else:
-            return 0
-        
-    def size(self):
+    def __len__(self):
         return len(self.literals)
-        
-    def symbols(self):
-        return set([l.symbol for l in self.literals])
-    
-    def is_false(self):
-        return len(self.literals) == 0
-    
-    def disjoin(self, clause):
-        common_symbols = set(self.literal_values.keys()) & set(clause.literal_values.keys())
-        for sym in common_symbols:
-            if self.symbol_value(sym) * clause.symbol_value(sym) == -1:
-                return None
-        return Clause(list(set(self.literals + clause.literals)))
 
-    def remove(self, sym):
-        new_literals = set(self.literals) - set([Literal(sym, False), Literal(sym, True)])
-        return Clause(list(new_literals))
+    def __bool__(self):
+        return len(self.literals) > 0
 
     def __eq__(self, other):
         return set(self.literals) == set(other.literals)
@@ -88,11 +75,42 @@ class Clause:
     def __hash__(self):
         return hash(tuple(sorted([str(l) for l in self.literals])))
 
-      
     def __str__(self):
         if len(self.literals) == 0:
             return 'FALSE'
         else:
             return ' || '.join([str(l) for l in self.literals])
+        
+    def __contains__(self, sym):
+        return sym in self.literal_values
+
+    def __or__(self, other):
+        common_symbols = set(self.literal_values.keys()) & set(other.literal_values.keys())
+        for sym in common_symbols:
+            if self.literal_values[sym] != other.literal_values[sym]:
+                return None
+        return Clause(list(set(self.literals + other.literals)))
+
+    def __getitem__(self, sym):
+        return self.literal_values[sym]
+
+    def symbols(self):
+        return set([l.symbol for l in self.literals])
+
+    def remove(self, sym):
+        new_literals = set(self.literals) - set([Literal(sym, False), Literal(sym, True)])
+        return Clause(list(new_literals))
 
  
+def check_term(term, clauses):
+    def check_against_clause(clause):
+        for symbol in clause.symbols():
+            if term[symbol] == -1 and clause[symbol]: # TODO: fix this!
+                return True
+            elif term[symbol] == 1 and not clause[symbol]: # TODO: fix this!
+                return True
+        return False
+    for clause in clauses:
+        if not check_against_clause(clause):
+            return False
+    return True   

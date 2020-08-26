@@ -1,53 +1,50 @@
-def get_symbols(clauses):
-    syms = set([])
-    for clause in clauses:
-        syms = syms | clause.symbols()
-    return syms
+from cnf import Clause, Literal, get_symbols, check_term
+from resolution import unit_resolution
+   
+class SearchSolver:
+            
+    def __call__(self, clauses):
+        symbols = get_symbols(clauses)
+        self.visited = 0
+        result = self._search_solver_helper(clauses, symbols)
+        return result
+    
+    def _search_solver_helper(self, clauses, symbols):
+        def assign(model_so_far, symbol, bool_assignment):
+            if bool_assignment:
+                assignment = 1
+            else:
+                assignment = -1
+            return {**model_so_far, symbol: assignment}
 
-def check_model_against_clause(model, clause):
-    for symbol in clause.symbols():
-        if model[symbol] == clause.symbol_value(symbol):
-            return True
-    return False
-
-def check_model(model, clauses):
-    for clause in clauses:
-        if not check_model_against_clause(model, clause):
-            return False
-    return True
-
-def assign(model_so_far, symbol, bool_assignment):
-    if bool_assignment:
-        assignment = 1
-    else:
-        assignment = -1
-    return {**model_so_far, symbol: assignment}
-
-
-def search_solver(clauses, verbose=False):
-    """
-    Example usage:
+        def model_from_clauses(clauses):
+            def value(b):
+                return 1 if b else -1  
+            unit_clauses = [c.literals[0] for c in clauses if len(c) == 1]
+            model = {c.symbol: value(not c.neg) for c in unit_clauses}
+            return model
         
-    from search import *
-    from resolution import example_clauses
-    search_solver(example_clauses)           [ should return False ]
-    search_solver(example_clauses[1:])       [ should return True ]
+        self.visited += 1
+        if clauses is None:
+            return None
+        m = model_from_clauses(clauses)
+        unassigned_symbols = sorted(symbols - m.keys())  # TODO: different orders
+        if len(unassigned_symbols) == 0:
+            if check_term(m, clauses):
+                return m
+            else:
+                return None
+        else:
+            next_symbol = unassigned_symbols[0]
+            positive_unit_clause = Clause([Literal(next_symbol, neg=False)])
+            new_clauses = unit_resolution(positive_unit_clause, clauses)
+            sat_if_true = self._search_solver_helper(new_clauses, symbols) 
+            if sat_if_true != None: # early termination if already satisfied
+                return sat_if_true
+            negative_unit_clause = Clause([Literal(next_symbol, neg=True)])
+            new_clauses = unit_resolution(negative_unit_clause, clauses)
+            sat_if_false =  self._search_solver_helper(new_clauses, symbols)
+            return sat_if_false       
+    
 
-    """    
-    symbols = list(get_symbols(clauses))
-    return _search_solver_helper(clauses, symbols, dict())
-                
-def _search_solver_helper(clauses, unassigned_symbols, m):
-    if len(unassigned_symbols) == 0:
-        return check_model(m, clauses)
-    else:
-        next_symbol = unassigned_symbols[0]
-        satisfiable_if_true = _search_solver_helper(
-                clauses, 
-                unassigned_symbols[1:], 
-                assign(m, next_symbol, True))
-        return satisfiable_if_true or _search_solver_helper(
-                clauses, 
-                unassigned_symbols[1:], 
-                assign(m, next_symbol, False))
 
