@@ -1,3 +1,12 @@
+VERBOSE = False
+
+if VERBOSE:
+    def log(s):
+        print(s)
+else:
+    def log(s):
+        pass
+
 def irange(i, j):
     return range(i, j+1)
 

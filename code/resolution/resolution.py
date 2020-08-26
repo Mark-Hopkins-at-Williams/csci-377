@@ -1,7 +1,6 @@
 import queue
-
-def log(s):
-    pass
+from cnf import Cnf
+from util import log
 
 def resolve_symbol(clause1, clause2, symbol):
     if symbol in clause1 and symbol in clause2:
@@ -63,12 +62,18 @@ def general_resolution_solver(processed, initial_unprocessed, clause_filter):
     log("Proved sat after generating {} clauses.".format(unprocessed.numGenerated()))
     return processed
 
-def full_resolution(clauses):
+def full_resolution(sent):
+    clauses = sent.clauses
     processed = set([])
     unprocessed = clauses
     return general_resolution_solver(processed, unprocessed, lambda x: True)
 
-def unit_resolution(unit_clause, clauses):
+def unit_resolution(unit_clause, sent):
+    clauses = sent.clauses
     processed = set(clauses)
     unprocessed = [unit_clause]
-    return general_resolution_solver(processed, unprocessed, lambda x: len(x) == 1)
+    result = general_resolution_solver(processed, unprocessed, lambda x: len(x) == 1)
+    if result is not None:
+        return Cnf(result)
+    else:
+        return None

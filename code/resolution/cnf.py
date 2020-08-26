@@ -27,13 +27,7 @@ def c(s):
     return Clause([l(x) for x in literal_strings])
 
 def sentence(s):
-    return [c(clause) for clause in s]
-
-def get_symbols(clauses):
-    syms = set([])
-    for clause in clauses:
-        syms = syms | clause.symbols()
-    return syms
+    return Cnf([c(clause) for clause in s])
 
 
 class Literal:
@@ -101,16 +95,41 @@ class Clause:
         new_literals = set(self.literals) - set([Literal(sym, False), Literal(sym, True)])
         return Clause(list(new_literals))
 
+
+class Cnf:
+    def __init__(self, clauses):
+        self.clauses = clauses
+
  
-def check_term(term, clauses):
-    def check_against_clause(clause):
-        for symbol in clause.symbols():
-            if term[symbol] == -1 and clause[symbol]: # TODO: fix this!
-                return True
-            elif term[symbol] == 1 and not clause[symbol]: # TODO: fix this!
-                return True
-        return False
-    for clause in clauses:
-        if not check_against_clause(clause):
+    def check_term(self, term):
+        def check_against_clause(clause):
+            for symbol in clause.symbols():
+                if term[symbol] == -1 and clause[symbol]: # TODO: fix this!
+                    return True
+                elif term[symbol] == 1 and not clause[symbol]: # TODO: fix this!
+                    return True
             return False
-    return True   
+        for clause in self.clauses:
+            if not check_against_clause(clause):
+                return False
+        return True   
+
+    def get_symbols(self):
+        syms = set([])
+        for clause in self.clauses:
+            syms = syms | clause.symbols()
+        return syms
+
+    def current_assignment(self):
+        def value(b):
+            return 1 if b else -1  
+        unit_clauses = [c.literals[0] for c in self.clauses if len(c) == 1]
+        model = {c.symbol: value(not c.neg) for c in unit_clauses}
+        return model
+    
+    def __str__(self):
+        clause_strs = sorted([str(c) for c in self.clauses])     
+        return '\n'.join(clause_strs)
+    
+    
+
