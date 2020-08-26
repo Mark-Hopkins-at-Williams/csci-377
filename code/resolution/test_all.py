@@ -1,6 +1,5 @@
 import unittest
 import cnf
-from cnf import check_term
 from resolution import resolve_symbol, unit_resolution, full_resolution
 from search import SearchSolver
 from sudoku import SudokuBoard, exactly_one_clauses
@@ -166,7 +165,7 @@ class TestSudoku(unittest.TestCase):
     
     def test_constraints(self):
         board0 = SudokuBoard([[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]])
-        cnf = sorted([str(c) for c in board0.cnf()])     
+        #cnf = sorted([str(c) for c in board0.cnf()])     
         expected = ["!d1_1_1 || !d1_1_2",
                     "!d1_1_1 || !d1_1_2",
                     "!d1_1_1 || !d1_1_3",
@@ -519,7 +518,7 @@ class TestSudoku(unittest.TestCase):
                     "d4_3_1 || d4_3_2 || d4_4_1 || d4_4_2",
                     "d4_3_3 || d4_3_4 || d4_4_3 || d4_4_4",
                     "d4_4_1 || d4_4_2 || d4_4_3 || d4_4_4"]  
-        assert expected == cnf
+        assert '\n'.join(expected) == str(board0.cnf())
 
 
 
@@ -535,9 +534,9 @@ class TestLogicalInference(unittest.TestCase):
                              '!b || f', 
                              '!b || c'])
         model = {'a': -1, 'e': -1, 'b': -1, 'f': 1, 'd': 1, 'c': 1}
-        assert check_term(model, sent)
+        assert sent.check_term(model)
         model = {'a': -1, 'e': -1, 'b': 1, 'f': -1, 'd': -1, 'c': -1}
-        assert not check_term(model, sent) 
+        assert not sent.check_term(model) 
 
     def test_resolution_solver(self):
         clauses =  ['a || b',
@@ -591,7 +590,7 @@ class TestLogicalInference(unittest.TestCase):
                                  'c || !e', 
                                  'd || !e', 
                                  'd || e'])
-        assert set(resolved) == set(expected)
+        assert set(resolved.clauses) == set(expected.clauses)
         resolved = unit_resolution(cnf.c('!c'), resolved)
         
     def test_search_solver(self):

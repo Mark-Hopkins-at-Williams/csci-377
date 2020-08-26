@@ -2,6 +2,7 @@ import math
 import cnf
 import copy
 from util import irange, all_pairs_from_seq
+from cnf import Cnf
 
 class SudokuBoard:
     
@@ -49,7 +50,7 @@ class SudokuBoard:
                 if digit != 0:
                     clause = cnf.c(lit(digit, row+1, col+1))
                     clauses.append(clause)
-        return clauses
+        return Cnf(clauses)
     
     def solve(self, solver):
         model = solver(self.cnf())

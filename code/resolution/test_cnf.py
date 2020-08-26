@@ -1,6 +1,5 @@
 import unittest
 import cnf
-from cnf import check_term
 
 
 class TestLogicalInference(unittest.TestCase):
@@ -55,9 +54,9 @@ class TestLogicalInference(unittest.TestCase):
                              '!b || f', 
                              '!b || c'])
         model = {'a': -1, 'e': -1, 'b': -1, 'f': 1, 'd': 1, 'c': 1}
-        assert check_term(model, sent)
+        assert sent.check_term(model)
         model = {'a': -1, 'e': -1, 'b': 1, 'f': -1, 'd': -1, 'c': -1}
-        assert not check_term(model, sent) 
+        assert not sent.check_term(model) 
 
         
     def test_cnf(self):
