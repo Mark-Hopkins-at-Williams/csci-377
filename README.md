@@ -10,7 +10,7 @@
 MWF 135-225pm (Section 2, Performing Arts 320), MWF 310-4pm (Section 3, 
 online at [https://zoom.us/j/3344875668]([https://zoom.us/j/3344875668])).
 
-**Office Hours:** M 10-1130pm, WF 4-5pm (all by appointment - sign up 
+**Office Hours:** TuTh 3-4pm, F 4-5pm (all by appointment - sign up 
 using [this link](https://calendar.google.com/calendar/selfsched?sstoken=UU5mSjE1SFNSUk5xfGRlZmF1bHR8NzQ2MDU3MzJkYjQyOTkxOGE3OWViMzU0MDYxMTQxOWM)).
 
 **Textbook:** Artificial Intelligence: A Modern Approach (4th edition) by 
